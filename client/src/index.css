@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  /* Define colors in the theme block for Intellisense and standard utilities */
+  --color-accent: #6366f1;
+  --font-sans: 'Inter', 'system-ui', 'sans-serif';
+}
+
+@layer base {
+  :root {
+    --bg-main: #ffffff;
+    --bg-surface: #f5f5f5;
+    --border-main: #e5e5e5;
+    --text-main: #0a0a0a;
+    --text-muted: #6b7280;
+  }
+
+  .dark {
+    --bg-main: #0a0a0a;
+    --bg-surface: #111111;
+    --border-main: #222222;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  }
+
+  /* Smooth transition for all background, border and text updates */
+  *, *::before, *::after {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+
+  /* Global pointer cursor for interactive elements */
+  .cursor-pointer, 
+  button, 
+  [role="button"],
+  a {
+    cursor: pointer !important;
+  }
+}
+
+/* 
+  Map all existing naming conventions to our dynamic variables 
+  This allows components to use either light or dark utility names 
+  and have them respond to the theme class automatically.
+*/
+
+@utility bg-lightBg { background-color: var(--bg-main); }
+@utility bg-darkBg { background-color: var(--bg-main); }
+
+@utility bg-lightSurface { background-color: var(--bg-surface); }
+@utility bg-darkSurface { background-color: var(--bg-surface); }
+
+@utility border-lightBorder { border-color: var(--border-main); }
+@utility border-darkBorder { border-color: var(--border-main); }
+
+@utility text-gray-500 { color: var(--text-muted); }
+
+/* Hide scrollbar utility */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Global scrollbar hiding as requested */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure Tailwind's dark: variant works if we still want to use it manually */
+@variant dark (&:where(.dark, .dark *));
