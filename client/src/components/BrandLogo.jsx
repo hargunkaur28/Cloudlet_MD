@@ -14,16 +14,10 @@ const BrandLogo = ({ className = "w-10 h-10" }) => {
   return (
     <div className={`${className} rounded-lg flex items-center justify-center overflow-hidden shadow-sm shrink-0`}>
       <img
-        src={errorStatus === 0 ? "/image.png" : "/logo.png"}
+        src="/logo.png"
         alt="Cloudlet"
         className="w-full h-full object-cover"
-        onError={() => {
-          if (errorStatus === 0) {
-            setErrorStatus(1);
-          } else {
-            setErrorStatus(2);
-          }
-        }}
+        onError={() => setErrorStatus(2)}
       />
     </div>
   );
