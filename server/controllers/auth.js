@@ -86,8 +86,8 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   res.cookie('jwt', '', {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'none',
     expires: new Date(0),
   });
   res.status(200).json({ success: true, message: 'Logged out successfully' });
