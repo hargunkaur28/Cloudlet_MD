@@ -18,9 +18,12 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.userId).select('-password');
       next();
     } catch (error) {
+      console.error('JWT Verification Failed:', error.message);
       res.status(401).json({ success: false, message: 'Not authorized, token failed' });
     }
   } else {
+    console.error('No JWT Token found in cookies or headers');
+    console.log('Cookies received:', JSON.stringify(req.cookies));
     res.status(401).json({ success: false, message: 'Not authorized, no token' });
   }
 };
