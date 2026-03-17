@@ -11,6 +11,9 @@ import AdminDashboard from './pages/AdminDashboard';
 import Settings from './pages/Settings';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Starred from './pages/Starred';
+import Trash from './pages/Trash';
+import Recent from './pages/Recent';
 
 function App() {
   const { user } = useAuth();
@@ -27,16 +30,20 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
+      <Route path="/login" element={!user ? <Login /> : <Navigate to={user.role === 'admin' ? "/admin" : "/"} />} />
+      <Route path="/signup" element={!user ? <Signup /> : <Navigate to={user.role === 'admin' ? "/admin" : "/"} />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/file/:id" element={<SharedFile />} />
       
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route index element={<Dashboard />} />
+        <Route index element={user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />} />
+        <Route path="folder/:folderId" element={<Dashboard />} />
         <Route path="requests" element={<Requests />} />
         <Route path="shared" element={<SharedWithMe />} />
+        <Route path="starred" element={<Starred />} />
+        <Route path="recent" element={<Recent />} />
+        <Route path="trash" element={<Trash />} />
         <Route path="settings" element={<Settings />} />
         <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
       </Route>

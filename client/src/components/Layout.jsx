@@ -5,12 +5,14 @@ import Sidebar from './Sidebar';
 
 const Layout = () => {
   return (
-    <div className="h-screen flex flex-col bg-lightBg dark:bg-darkBg text-darkBg dark:text-lightBg overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#f6f7fb] dark:bg-darkBg text-darkBg dark:text-lightBg">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-[calc(100vh-80px)]">
         <Sidebar className="hidden md:flex" />
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-lightSurface dark:bg-darkSurface border-l border-lightBorder dark:border-darkBorder">
-          <Outlet />
+        <main className="flex-1 bg-transparent">
+          <div className="w-full max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-10 py-8">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

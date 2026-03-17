@@ -36,28 +36,46 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="h-16 border-b border-lightBorder dark:border-darkBorder bg-lightBg dark:bg-darkBg flex items-center justify-between px-4 md:px-8 relative z-50">
-      <div className="flex items-center gap-4">
-        {user && <button className="md:hidden text-gray-500 hover:text-accent transition-colors cursor-pointer"><Menu size={20} /></button>}
-        <Link to="/" className="text-xl font-bold tracking-tight text-accent flex items-center gap-2">
-          <BrandLogo />
-          Cloudlet
+    <nav className="h-20 bg-white/80 dark:bg-[#0b0b0f]/80 flex items-center sticky top-0 z-50 backdrop-blur-md">
+      {/* Desktop Logo Section */}
+      <div className="hidden md:flex items-center w-72 h-full px-8">
+        <Link to="/" className="flex items-center gap-3">
+          <BrandLogo className="w-11 h-11 rounded-2xl bg-white dark:bg-[#111] border border-lightBorder dark:border-darkBorder flex items-center justify-center shrink-0 shadow-none hover:scale-105 transition-transform" />
+          <div className="leading-tight">
+            <div className="text-xl font-black tracking-tighter text-accent">Cloudlet</div>
+            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-0.5">
+              {user?.role === 'admin' ? 'Admin Panel' : 'My Drive'}
+            </div>
+          </div>
         </Link>
       </div>
 
-      {user && (
-        <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-          <input 
-            type="text" 
-            placeholder="Search files..."
-            className="w-full bg-lightSurface dark:bg-darkSurface border border-lightBorder dark:border-darkBorder rounded-md py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:border-accent transition-colors"
-          />
+      {/* Main Content Area */}
+      <div className="flex-1 flex items-center justify-between px-4 md:px-10 h-full">
+        <div className="flex items-center gap-3 md:hidden">
+          {user && (
+            <button className="text-gray-500 dark:text-gray-300 hover:text-accent transition-colors cursor-pointer">
+              <Menu size={20} />
+            </button>
+          )}
+          <Link to="/" className="text-xl font-black tracking-tighter text-accent">
+            Cloudlet
+          </Link>
         </div>
-      )}
+
+        {user && (
+          <div className="hidden md:flex flex-1 max-w-xl relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+            <input 
+              type="text" 
+              placeholder="Search in Cloudlet..."
+              className="w-full bg-gray-50 dark:bg-black/20 border border-lightBorder dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-4 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent/15 focus:border-accent/40 transition-all shadow-sm dark:shadow-none"
+            />
+          </div>
+        )}
 
       <div className="flex items-center gap-2 md:gap-4">
-        <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-lightSurface dark:hover:bg-darkSurface transition-colors cursor-pointer">
+        <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-lightSurface dark:hover:bg-white/5 transition-colors cursor-pointer text-gray-700 dark:text-gray-200">
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         
@@ -70,7 +88,7 @@ const Navbar = () => {
                   // Hide badge when opening
                   if (!showNotifications) markAllAsRead();
                 }}
-                className="p-2 rounded-md hover:bg-lightSurface dark:hover:bg-darkSurface transition-colors relative cursor-pointer"
+                className="p-2 rounded-md hover:bg-lightSurface dark:hover:bg-white/5 transition-colors relative cursor-pointer text-gray-700 dark:text-gray-200"
               >
                 <Bell size={18} />
                 {(unreadCount > 0 && !showNotifications) && (
@@ -136,14 +154,15 @@ const Navbar = () => {
               <div className="hidden sm:flex w-8 h-8 rounded-full bg-gradient-to-tr from-accent to-purple-500 items-center justify-center text-white font-medium text-sm">
                 {user.name.charAt(0).toUpperCase()}
               </div>
-              <button onClick={logout} className="p-2 text-gray-500 hover:text-red-500 transition-colors cursor-pointer" title="Logout">
+              <button onClick={logout} className="p-2 text-gray-500 dark:text-gray-300 hover:text-red-500 transition-colors cursor-pointer" title="Logout">
                 <LogOut size={18} />
               </button>
             </div>
           </div>
         ) : (
-          <Link to="/login" className="px-4 py-2 bg-accent hover:bg-indigo-600 text-white rounded-md text-sm font-medium transition-colors">Login</Link>
+          <Link to="/login" className="px-5 py-2.5 bg-accent hover:bg-indigo-600 text-white rounded-2xl text-sm font-semibold transition-all shadow-lg shadow-accent/20">Login</Link>
         )}
+        </div>
       </div>
     </nav>
   );

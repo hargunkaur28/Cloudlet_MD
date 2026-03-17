@@ -13,6 +13,10 @@ const fileSchema = new mongoose.Schema({
       permission: { type: String, enum: ['view', 'edit'] }
     }
   ],
+  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: null },
+  isStarred: { type: Boolean, default: false },
+  isTrashed: { type: Boolean, default: false },
+  trashedAt: { type: Date },
   accessRequests: [
     {
       user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -21,5 +25,9 @@ const fileSchema = new mongoose.Schema({
     }
   ]
 }, { timestamps: true });
+
+fileSchema.index({ owner: 1, isTrashed: 1 });
+fileSchema.index({ folderId: 1, isTrashed: 1 });
+fileSchema.index({ isStarred: 1, owner: 1 });
 
 module.exports = mongoose.model('File', fileSchema);

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
+import { toast } from 'react-hot-toast';
 
 const AuthContext = createContext();
 
@@ -40,8 +41,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await api.post('/auth/logout');
-    setUser(null);
+    try {
+      await api.post('/auth/logout');
+      setUser(null);
+      toast.success('Logged out');
+    } catch (error) {
+      console.error('Logout failed', error);
+      // Still clear user state even if request fails to let them "exit" the UI
+      setUser(null);
+    }
   };
 
   return (

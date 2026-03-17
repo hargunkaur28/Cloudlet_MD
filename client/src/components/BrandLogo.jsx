@@ -5,14 +5,14 @@ const BrandLogo = ({ className = "w-10 h-10" }) => {
 
   if (errorStatus === 2) {
     return (
-      <div className={`${className} bg-accent flex items-center justify-center text-white text-lg font-bold rounded-lg shadow-sm shrink-0`}>
+      <div className={`bg-accent flex items-center justify-center text-white text-lg font-bold rounded-lg shadow-sm shrink-0 ${className}`}>
         C
       </div>
     );
   }
 
   return (
-    <div className={`${className} rounded-lg flex items-center justify-center overflow-hidden shadow-sm shrink-0`}>
+    <div className={`rounded-lg flex items-center justify-center overflow-hidden shadow-sm shrink-0 ${className}`}>
       <img
         src="/logo.png"
         alt="Cloudlet"

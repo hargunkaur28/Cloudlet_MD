@@ -18,8 +18,8 @@ const Login = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await login(email, password);
-      navigate('/');
+      const data = await login(email, password);
+      navigate(data.user.role === 'admin' ? '/admin' : '/');
       toast.success('Successfully logged in');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');

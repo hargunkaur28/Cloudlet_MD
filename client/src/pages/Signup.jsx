@@ -19,8 +19,8 @@ const Signup = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await signup(name, email, password);
-      navigate('/');
+      const data = await signup(name, email, password);
+      navigate(data.user.role === 'admin' ? '/admin' : '/');
       toast.success('Account created successfully');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Signup failed');

@@ -14,7 +14,7 @@ export default {
         lightBg: '#ffffff',
         lightSurface: '#f5f5f5',
         lightBorder: '#e5e5e5',
-        accent: '#6366f1'
+        accent: '#6d5dfc'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

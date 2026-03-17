@@ -26,7 +26,5 @@ const streamUpload = (req) => {
   });
 };
 
-module.exports = {
-  cloudinary,
-  streamUpload
-};
+module.exports = streamUpload;
+module.exports.cloudinary = cloudinary;

@@ -37,6 +37,22 @@ export const useFiles = () => {
     }
   };
 
+  const updateFile = async (id, formData) => {
+    try {
+      const { data } = await api.patch(`/files/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (data.success) {
+        setFiles(prev => prev.map(f => f._id === id ? data.file : f));
+        toast.success('File updated');
+        return true;
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Update failed');
+      return false;
+    }
+  };
+
   const deleteFile = async (id) => {
     try {
       await api.delete(`/files/${id}`);
@@ -52,6 +68,7 @@ export const useFiles = () => {
     loading,
     fetchFiles,
     uploadFile,
-    deleteFile
+    deleteFile,
+    updateFile
   };
 };
