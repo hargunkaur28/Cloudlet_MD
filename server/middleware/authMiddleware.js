@@ -7,9 +7,14 @@ const protect = async (req, res, next) => {
   // Read the JWT from the cookie
   token = req.cookies.jwt;
 
-  // Fallback to Bearer token just in case
+  // Fallback to Bearer token
   if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
+  }
+
+  // Fallback to query parameter (needed for window.open direct links like PDFs)
+  if (!token && req.query.token) {
+    token = req.query.token;
   }
 
   if (token) {

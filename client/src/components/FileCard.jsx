@@ -46,8 +46,11 @@ const FileCard = ({ file, viewMode, onDelete, onUpdate, onStar }) => {
       window.setTimeout(() => setIsPreviewOpen(true), 0);
     } else {
       // Open the same-origin proxy view endpoint in a new tab.
-      // The backend streams the file (from Cloudinary) to avoid cross-origin PDF viewer issues.
-      const finalUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api') + `/files/${file._id}/view`;
+      // Append token for authentication since window.open doesn't send headers.
+      const token = localStorage.getItem('token');
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const finalUrl = `${baseUrl}/files/${file._id}/view${token ? `?token=${token}` : ''}`;
+      
       const win = window.open(finalUrl, '_blank', 'noopener,noreferrer');
       if (!win) {
         const link = document.createElement('a');
