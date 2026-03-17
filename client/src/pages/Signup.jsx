@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Loader2, ArrowRight, Sun, Moon } from 'lucide-react';
+import BrandLogo from '../components/BrandLogo';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -35,15 +36,7 @@ const Signup = () => {
         {/* Brand Header */}
         <div className="absolute top-10 left-8 sm:left-12 lg:left-20 xl:left-32 flex items-center justify-between w-[calc(100%-4rem)] sm:w-[calc(100%-6rem)] lg:w-[calc(100%-10rem)] xl:w-[calc(100%-16rem)]">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
-                <img src="/image.png" alt="Cloudlet" className="w-full h-full object-cover" onError={(e) => {
-                    e.target.src = '/logo.png';
-                    e.target.onerror = () => {
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = '<div class="w-full h-full bg-accent flex items-center justify-center text-white text-lg font-bold">C</div>';
-                    };
-                }} />
-            </div>
+            <BrandLogo />
             <span className="text-xl font-bold tracking-tight text-accent">Cloudlet</span>
           </Link>
 

@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useNotifications } from '../context/NotificationContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, Sun, Moon, LogOut, Bell, Menu, Check, Inbox } from 'lucide-react';
+import BrandLogo from './BrandLogo';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -39,15 +40,7 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {user && <button className="md:hidden text-gray-500 hover:text-accent transition-colors cursor-pointer"><Menu size={20} /></button>}
         <Link to="/" className="text-xl font-bold tracking-tight text-accent flex items-center gap-2">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
-            <img src="/image.png" alt="Cloudlet" className="w-full h-full object-cover" onError={(e) => {
-              e.target.src = '/logo.png';
-              e.target.onerror = () => {
-                e.target.style.display = 'none';
-                e.target.parentElement.innerHTML = '<div class="w-full h-full bg-accent flex items-center justify-center text-white text-lg font-bold">C</div>';
-              };
-            }} />
-          </div>
+          <BrandLogo />
           Cloudlet
         </Link>
       </div>
