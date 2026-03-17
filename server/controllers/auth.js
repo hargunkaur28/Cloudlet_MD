@@ -23,9 +23,10 @@ exports.signup = async (req, res) => {
     });
 
     if (user) {
-      generateToken(res, user._id);
+      const token = generateToken(res, user._id);
       res.status(201).json({
         success: true,
+        token,
         user: {
           _id: user._id,
           name: user.name,
@@ -64,9 +65,10 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      generateToken(res, user._id);
+      const token = generateToken(res, user._id);
       res.json({
         success: true,
+        token,
         user: {
           _id: user._id,
           name: user.name,

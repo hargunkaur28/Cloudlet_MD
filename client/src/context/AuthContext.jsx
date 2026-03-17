@@ -30,12 +30,14 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await api.post('/auth/login', { email, password });
+    if (data.token) localStorage.setItem('token', data.token);
     setUser(data.user);
     return data;
   };
 
   const signup = async (name, email, password) => {
     const { data } = await api.post('/auth/signup', { name, email, password });
+    if (data.token) localStorage.setItem('token', data.token);
     setUser(data.user);
     return data;
   };
@@ -43,11 +45,12 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post('/auth/logout');
+      localStorage.removeItem('token');
       setUser(null);
       toast.success('Logged out');
     } catch (error) {
       console.error('Logout failed', error);
-      // Still clear user state even if request fails to let them "exit" the UI
+      localStorage.removeItem('token');
       setUser(null);
     }
   };

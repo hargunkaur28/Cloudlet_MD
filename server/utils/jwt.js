@@ -7,10 +7,12 @@ const generateToken = (res, userId) => {
 
   res.cookie('jwt', token, {
     httpOnly: true,
-    secure: true, // Required for cross-site cookies in modern browsers
-    sameSite: 'none', // Required for cross-site cookies in modern browsers
+    secure: true,
+    sameSite: 'none',
     maxAge: 30 * 24 * 60 * 60 * 1000, 
   });
+
+  return token;
 };
 
 module.exports = generateToken;
