@@ -21,12 +21,27 @@ setupCronJobs();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy for secure cookies behind Render/Heroku/Vercel
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL || 'http://localhost:5173',
-    'http://localhost:5174'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'http://localhost:5173',
+      'http://localhost:5174'
+    ].filter(Boolean); // Remove null/undefined
+
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Fallback to true for debugging if origin is weird, or be strict: callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(compression());
