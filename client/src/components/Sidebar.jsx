@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 import api from '../utils/api';
 import { formatBytes } from '../utils/formatters';
 
-const Sidebar = ({ className = '' }) => {
+const Sidebar = ({ className = '', isOpen, onClose }) => {
   const { user } = useAuth();
   const [recentFiles, setRecentFiles] = useState([]);
   const [topFolders, setTopFolders] = useState([]);
@@ -56,7 +56,15 @@ const Sidebar = ({ className = '' }) => {
   ];
 
   return (
-    <aside className={`w-72 flex flex-col bg-white dark:bg-[#111] border-r border-lightBorder dark:border-darkBorder pt-6 transition-all duration-300 ${className}`}>
+    <aside className={`flex flex-col bg-white dark:bg-[#111] border-r border-lightBorder dark:border-darkBorder pt-6 transition-all duration-300 ease-in-out ${isOpen ? 'w-72 opacity-100' : 'w-0 opacity-0 border-r-0 overflow-hidden'} ${className}`}>
+      {/* Mobile Close Button */}
+      <button 
+        onClick={onClose}
+        className="md:hidden absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+      >
+        <ChevronRight className="rotate-180" size={20} />
+      </button>
+
       {user?.role === 'admin' && (
         <div className="mb-0 overflow-hidden transition-all duration-300">
           <div className="mb-8 font-medium">
@@ -64,6 +72,7 @@ const Sidebar = ({ className = '' }) => {
             <div className="space-y-1 px-4">
               <NavLink
                 to="/admin"
+                onClick={onClose}
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                     isActive 
@@ -77,6 +86,7 @@ const Sidebar = ({ className = '' }) => {
               </NavLink>
               <NavLink
                 to="/settings"
+                onClick={onClose}
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                     isActive 
@@ -100,6 +110,7 @@ const Sidebar = ({ className = '' }) => {
               <NavLink
                 key={item.name}
                 to={item.path}
+                onClick={onClose}
                 end={item.path === '/'}
                 onDragOver={(e) => {
                   if (item.type === 'star') {
@@ -156,6 +167,7 @@ const Sidebar = ({ className = '' }) => {
                   <NavLink
                     key={item.name}
                     to={item.path}
+                    onClick={onClose}
                     className={({ isActive }) => 
                       `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                         isActive 
@@ -182,6 +194,7 @@ const Sidebar = ({ className = '' }) => {
                   <NavLink
                     key={folder._id}
                     to={`/folder/${folder._id}`}
+                    onClick={onClose}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverFolder(folder._id);
@@ -232,6 +245,7 @@ const Sidebar = ({ className = '' }) => {
                   <NavLink
                     key={folder._id}
                     to={`/folder/${folder._id}`}
+                    onClick={onClose}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverFolder(folder._id);
@@ -282,6 +296,7 @@ const Sidebar = ({ className = '' }) => {
                   <NavLink
                     key={item.name}
                     to={item.path}
+                    onClick={onClose}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverItem(item.name);
@@ -350,6 +365,7 @@ const Sidebar = ({ className = '' }) => {
         <div className="pt-2 border-t border-lightBorder dark:border-darkBorder px-4 pb-5">
           <NavLink
             to="/settings"
+            onClick={onClose}
             className="flex items-center gap-3 px-4 py-2 rounded-2xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-darkSurface transition-colors"
           >
             <Settings size={18} />

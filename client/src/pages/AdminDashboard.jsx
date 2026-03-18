@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { toast } from 'react-hot-toast';
-import { Trash2, Users, FileText, LayoutDashboard, Loader2, Edit, Search, Filter, ShieldCheck, Activity, Database } from 'lucide-react';
+import { Trash2, Users, FileText, LayoutDashboard, Loader2, Edit, Search, Filter, ShieldCheck, Activity, Database, Mail } from 'lucide-react';
 import { formatBytes } from '../utils/formatters';
 import Loader from '../components/Loader';
 import EditFileModal from '../components/EditFileModal';
@@ -10,6 +10,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('files');
   const [users, setUsers] = useState([]);
   const [files, setFiles] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingFile, setEditingFile] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,12 +38,14 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [{ data: usersData }, { data: filesData }] = await Promise.all([
+      const [{ data: usersData }, { data: filesData }, { data: messagesData }] = await Promise.all([
         api.get('/admin/users'),
-        api.get('/admin/files')
+        api.get('/admin/files'),
+        api.get('/contact')
       ]);
       if (usersData.success) setUsers(usersData.users);
       if (filesData.success) setFiles(filesData.files);
+      if (messagesData.success) setMessages(messagesData.messages);
     } catch (error) {
       toast.error('Failed to load admin data');
     } finally {
@@ -82,6 +85,19 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteMessage = async (id) => {
+    if (!window.confirm("Delete this message?")) return;
+    try {
+      const { data } = await api.delete(`/contact/${id}`);
+      if (data.success) {
+        toast.success('Message deleted');
+        setMessages(prev => prev.filter(m => m._id !== id));
+      }
+    } catch (error) {
+      toast.error('Failed to delete message');
+    }
+  };
+
   const totalStorage = files.reduce((acc, file) => acc + file.size, 0);
 
   const filteredFiles = files.filter(f => 
@@ -93,6 +109,13 @@ const AdminDashboard = () => {
   const filteredUsers = users.filter(u => 
     u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     u.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredMessages = messages.filter(m => 
+    m.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.message.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) return <div className="h-full flex items-center justify-center"><Loader /></div>;
@@ -184,6 +207,13 @@ const AdminDashboard = () => {
               User Registry
               {activeTab === 'users' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent rounded-t-full"></div>}
             </button>
+            <button 
+              onClick={() => setActiveTab('messages')}
+              className={`pb-4 text-sm font-bold transition-all relative ${activeTab === 'messages' ? 'text-accent' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'}`}
+            >
+              Inquiries
+              {activeTab === 'messages' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent rounded-t-full"></div>}
+            </button>
           </div>
           <div className="flex items-center gap-2 pb-4">
             <button className="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -196,7 +226,7 @@ const AdminDashboard = () => {
         </div>
 
         <div className="p-4 overflow-x-auto no-scrollbar">
-          {activeTab === 'files' ? (
+          {activeTab === 'files' && (
             <table className="w-full text-left">
               <thead>
                 <tr className="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black">
@@ -260,7 +290,9 @@ const AdminDashboard = () => {
                 ))}
               </tbody>
             </table>
-          ) : (
+          )}
+
+          {activeTab === 'users' && (
             <table className="w-full text-left">
               <thead>
                 <tr className="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black">
@@ -308,6 +340,47 @@ const AdminDashboard = () => {
                           <Trash2 size={18} />
                         </button>
                       )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {activeTab === 'messages' && (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-black">
+                  <th className="px-6 py-5">Sender</th>
+                  <th className="px-6 py-5">Email</th>
+                  <th className="px-6 py-5">Message</th>
+                  <th className="px-6 py-5">Date</th>
+                  <th className="px-6 py-5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-white/[0.03]">
+                {filteredMessages.map(msg => (
+                  <tr key={msg._id} className="group hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors">
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 font-black text-xs">
+                          {msg.firstName.charAt(0).toUpperCase()}
+                        </div>
+                        <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{msg.firstName} {msg.lastName}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-xs font-medium text-gray-500 dark:text-gray-400">{msg.email}</td>
+                    <td className="px-6 py-5">
+                      <p className="text-xs text-gray-600 dark:text-gray-300 max-w-xs truncate" title={msg.message}>{msg.message}</p>
+                    </td>
+                    <td className="px-6 py-5 text-xs text-gray-500 font-medium">{new Date(msg.createdAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-5 text-right">
+                        <button 
+                          onClick={() => handleDeleteMessage(msg._id)}
+                          className="w-10 h-10 inline-flex items-center justify-center text-rose-500 hover:bg-rose-500/10 rounded-2xl transition-all"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                     </td>
                   </tr>
                 ))}

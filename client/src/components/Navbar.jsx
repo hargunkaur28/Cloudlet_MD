@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, Sun, Moon, LogOut, Bell, Menu, Check, Inbox } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
-const Navbar = () => {
+const Navbar = ({ onToggleSidebar, isOpen }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
@@ -36,10 +36,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="h-20 bg-white/80 dark:bg-[#0b0b0f]/80 flex items-center sticky top-0 z-50 backdrop-blur-md">
+    <nav className="h-20 bg-white/80 dark:bg-[#0b0b0f]/80 flex items-center sticky top-0 z-50 backdrop-blur-md border-b border-lightBorder dark:border-darkBorder/50">
       {/* Desktop Logo Section */}
-      <div className="hidden md:flex items-center w-72 h-full px-8">
-        <Link to="/" className="flex items-center gap-3">
+      <div className={`hidden md:flex items-center h-full transition-all duration-300 ease-in-out overflow-hidden border-r border-lightBorder dark:border-darkBorder ${isOpen ? 'w-72 px-8 opacity-100' : 'w-0 px-0 opacity-0 border-r-0'}`}>
+        <Link to="/" className="flex items-center gap-3 whitespace-nowrap">
           <BrandLogo className="w-11 h-11 rounded-2xl bg-white dark:bg-[#111] border border-lightBorder dark:border-darkBorder flex items-center justify-center shrink-0 shadow-none hover:scale-105 transition-transform" />
           <div className="leading-tight">
             <div className="text-xl font-black tracking-tighter text-accent">Cloudlet</div>
@@ -52,13 +52,16 @@ const Navbar = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-between px-4 md:px-10 h-full">
-        <div className="flex items-center gap-3 md:hidden">
+        <div className="flex items-center gap-3">
           {user && (
-            <button className="text-gray-500 dark:text-gray-300 hover:text-accent transition-colors cursor-pointer">
+            <button 
+              onClick={onToggleSidebar}
+              className="text-gray-500 dark:text-gray-300 hover:text-accent transition-colors cursor-pointer"
+            >
               <Menu size={20} />
             </button>
           )}
-          <Link to="/" className="text-xl font-black tracking-tighter text-accent">
+          <Link to="/" className="text-xl font-black tracking-tighter text-accent md:hidden">
             Cloudlet
           </Link>
         </div>

@@ -14,6 +14,9 @@ import ResetPassword from './pages/ResetPassword';
 import Starred from './pages/Starred';
 import Trash from './pages/Trash';
 import Recent from './pages/Recent';
+import Home from './pages/Home';
+import Security from './pages/Security';
+import Contact from './pages/Contact';
 
 function App() {
   const { user } = useAuth();
@@ -35,8 +38,10 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/file/:id" element={<SharedFile />} />
+      <Route path="/security" element={<Security />} />
+      <Route path="/contact" element={<Contact />} />
       
-      <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+      <Route path="/" element={!user ? <Home /> : <Layout />}>
         <Route index element={user?.role === 'admin' ? <AdminDashboard /> : <Dashboard />} />
         <Route path="folder/:folderId" element={<Dashboard />} />
         <Route path="requests" element={<Requests />} />
