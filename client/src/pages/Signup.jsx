@@ -3,13 +3,16 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Loader2, ArrowRight, Sun, Moon } from 'lucide-react';
+import { Loader2, ArrowRight, Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import BrandLogo from '../components/BrandLogo';
 
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [verifyPassword, setVerifyPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showVerifyPassword, setShowVerifyPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signup } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -17,6 +20,9 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== verifyPassword) {
+      return toast.error('Passwords do not match');
+    }
     setIsSubmitting(true);
     try {
       const data = await signup(name, email, password);
@@ -80,14 +86,44 @@ const Signup = () => {
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Password</label>
-              <input 
-                type="password"
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-xl border border-lightBorder dark:border-darkBorder bg-transparent focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <input 
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-xl border border-lightBorder dark:border-darkBorder bg-transparent focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm pr-11"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-accent transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Verify Password</label>
+              <div className="relative">
+                <input 
+                  type={showVerifyPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-xl border border-lightBorder dark:border-darkBorder bg-transparent focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm pr-11"
+                  value={verifyPassword}
+                  onChange={(e) => setVerifyPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowVerifyPassword(!showVerifyPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-accent transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
+                >
+                  {showVerifyPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div className="pt-1">

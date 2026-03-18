@@ -14,6 +14,7 @@ import ResetPassword from './pages/ResetPassword';
 import Starred from './pages/Starred';
 import Trash from './pages/Trash';
 import Recent from './pages/Recent';
+import SearchResults from './pages/SearchResults';
 import Home from './pages/Home';
 import Security from './pages/Security';
 import Contact from './pages/Contact';
@@ -50,6 +51,7 @@ function App() {
         <Route path="recent" element={<Recent />} />
         <Route path="trash" element={<Trash />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="search" element={<SearchResults />} />
         <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
       </Route>
     </Routes>

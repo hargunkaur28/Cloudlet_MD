@@ -44,6 +44,14 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
     return () => window.removeEventListener('drive-update', fetchSidebarData);
   }, [user]);
 
+  const handleNavClick = () => {
+    // For regular users, do NOT close automatically on click (only toggle)
+    // For admins, keep the existing behavior of closing on click
+    if (user?.role === 'admin') {
+      onClose();
+    }
+  };
+
   const driveNav = [
     { name: 'My Drive', path: '/', icon: <HardDrive size={18} /> },
     { name: 'Recent', path: '/recent', icon: <Clock size={14} />, type: 'recent' },
@@ -72,7 +80,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
             <div className="space-y-1 px-4">
               <NavLink
                 to="/admin"
-                onClick={onClose}
+                onClick={handleNavClick}
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                     isActive 
@@ -86,7 +94,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
               </NavLink>
               <NavLink
                 to="/settings"
-                onClick={onClose}
+                onClick={handleNavClick}
                 className={({ isActive }) => 
                   `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                     isActive 
@@ -110,7 +118,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
               <NavLink
                 key={item.name}
                 to={item.path}
-                onClick={onClose}
+                onClick={handleNavClick}
                 end={item.path === '/'}
                 onDragOver={(e) => {
                   if (item.type === 'star') {
@@ -167,7 +175,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
                   <NavLink
                     key={item.name}
                     to={item.path}
-                    onClick={onClose}
+                    onClick={handleNavClick}
                     className={({ isActive }) => 
                       `flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm transition-all duration-200 ${
                         isActive 
@@ -194,7 +202,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
                   <NavLink
                     key={folder._id}
                     to={`/folder/${folder._id}`}
-                    onClick={onClose}
+                    onClick={handleNavClick}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverFolder(folder._id);
@@ -245,7 +253,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
                   <NavLink
                     key={folder._id}
                     to={`/folder/${folder._id}`}
-                    onClick={onClose}
+                    onClick={handleNavClick}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverFolder(folder._id);
@@ -296,7 +304,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
                   <NavLink
                     key={item.name}
                     to={item.path}
-                    onClick={onClose}
+                    onClick={handleNavClick}
                     onDragOver={(e) => {
                       e.preventDefault();
                       setDragOverItem(item.name);
@@ -365,7 +373,7 @@ const Sidebar = ({ className = '', isOpen, onClose }) => {
         <div className="pt-2 border-t border-lightBorder dark:border-darkBorder px-4 pb-5">
           <NavLink
             to="/settings"
-            onClick={onClose}
+            onClick={handleNavClick}
             className="flex items-center gap-3 px-4 py-2 rounded-2xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-darkSurface transition-colors"
           >
             <Settings size={18} />

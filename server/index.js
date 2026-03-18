@@ -12,6 +12,7 @@ const notificationRoutes = require('./routes/notifications');
 const folderRoutes = require('./routes/folderRoutes');
 const trashRoutes = require('./routes/trashRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const searchRoutes = require('./routes/searchRoutes');
 const setupCronJobs = require('./utils/cron');
 
 dotenv.config();
@@ -57,6 +58,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/folders', folderRoutes);
 app.use('/api/trash', trashRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/search', searchRoutes);
 
 app.get('/', (req, res) => res.send('Mini Drive API is running'));
 

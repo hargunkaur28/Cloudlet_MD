@@ -67,14 +67,22 @@ const Navbar = ({ onToggleSidebar, isOpen }) => {
         </div>
 
         {user && (
-          <div className="hidden md:flex flex-1 max-w-xl relative">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              const query = e.target.search.value;
+              if (query.trim()) navigate(`/search?q=${encodeURIComponent(query)}`);
+            }}
+            className="hidden md:flex flex-1 max-w-xl relative"
+          >
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
             <input 
+              name="search"
               type="text" 
               placeholder="Search in Cloudlet..."
               className="w-full bg-gray-50 dark:bg-black/20 border border-lightBorder dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-4 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent/15 focus:border-accent/40 transition-all shadow-sm dark:shadow-none"
             />
-          </div>
+          </form>
         )}
 
       <div className="flex items-center gap-2 md:gap-4">
